@@ -20,7 +20,7 @@ Record and replay DOM interactions for e2e frontend testing.
 
 ## Examples
 
-<details id="example$web" title="web" open><summary><span><a href="#example$web">#</a></span>  <code><strong>web</strong></code></summary>  <ul>    <details id="source$web" title="web source code" ><summary><span><a href="#source$web">#</a></span>  <code><strong>view source</strong></code></summary>  <a href="example/web.ts">example/web.ts</a>  <p>
+<details id="example$web" title="web" open><summary><span><a href="#example$web">#</a></span>  <code><strong>web</strong></code></summary>  <ul>  <p><a href="https://stagas.github.io/dom-recorder/example/web.html"><strong>Try it live</strong></a></p>  <details id="source$web" title="web source code" ><summary><span><a href="#source$web">#</a></span>  <code><strong>view source</strong></code></summary>  <a href="example/web.ts">example/web.ts</a>  <p>
 
 ```ts
 import { DOMRecorder } from 'dom-recorder'
