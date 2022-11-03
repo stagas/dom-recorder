@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "dist",
+    "example",
+    "node_modules",
+    "test",
+    "types"
+  ],
+  "compilerOptions": {
+    "types": [
+      "./types/globals",
+      "./types/modules",
+      "audioworklet",
+      "node",
+      "webmidi"
+    ]
+  }
+}

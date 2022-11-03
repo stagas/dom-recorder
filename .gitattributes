@@ -1,0 +1,8 @@
+* -linguist-detectable
+bench/** linguist-detectable
+src/** linguist-detectable
+example/** linguist-detectable
+test/** linguist-detectable
+types/** linguist-detectable
+*.ts linguist-language=TypeScript
+*.html -linguist-detectable
