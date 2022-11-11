@@ -462,7 +462,7 @@ export class DOMRecorder {
           display: none;
         }
       </style>
-      <div class="recorder-ui-pointer">
+      <div class="recorder-ui-pointer hidden">
         <!-- https://github.com/grommet/grommet-icons/blob/master/public/img/cursor.svg -->
         <svg width="30" height="30" viewBox="0 0 24 24">
         <polygon
