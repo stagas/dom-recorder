@@ -18,6 +18,7 @@ export type Events =
   & PointerEvent
   & WheelEvent
 
+const MIN_IDLE_TIME = parseInt(localStorage.recorderMinIdleTime) || 50
 const FRAME_TIME = 1000 / 60
 
 const allEvents = [
@@ -473,7 +474,9 @@ export class DOMRecorder {
         <button  ${this.replaying || !this.actions.length || handler.recording ? 'disabled' : 'onclick="recorder.replayServer()"'}>replay</button>
       </div>
       &nbsp;
-      <label>
+      <label
+        oncontextmenu="event.preventDefault();localStorage.recorderMinIdleTime=parseInt(prompt('Enter idle time(ms) needed for autoplay to begin:', parseInt(localStorage.recorderMinIdleTime) || 50))"
+      >
         auto:<input
           type="checkbox"
           onchange="localStorage.recorderAutoplay=this.checked"
@@ -594,9 +597,9 @@ export class DOMRecorder {
   }
 
   async waitUntilIdle() {
-    while (performance.now() - handler.lastEventTime < 1500) {
+    while (performance.now() - handler.lastEventTime < MIN_IDLE_TIME) {
       await new Promise((resolve) =>
-        setTimeout(resolve, 100)
+        setTimeout(resolve, 50)
       )
     }
   }
