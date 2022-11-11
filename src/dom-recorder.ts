@@ -300,6 +300,7 @@ export class DOMRecorder {
   actionsEl!: HTMLDetailsElement
   events = ''
   formEl!: HTMLFormElement
+  pointerEl!: HTMLDivElement
 
   autoplay = false
   skipped = 0
@@ -333,6 +334,8 @@ export class DOMRecorder {
     this.el ??= document.createElement('div')
     this.el.id = 'recorder-ui'
     this.paintEl()
+
+    this.pointerEl = this.el.querySelector('.recorder-ui-pointer')!
 
     this.controlsEl = this.el.querySelector('.recorder-ui-controls')!
     this.paintControls()
@@ -449,7 +452,30 @@ export class DOMRecorder {
         .recorder-ui-event-skipped {
           color: #777;
         }
+        .recorder-ui-pointer {
+          position: fixed;
+          z-index: 99999999;
+          mix-blend-mode: difference;
+        }
+        .recorder-ui-pointer svg {
+          position: relative;
+          left: -6px;
+          top: -3px;
+        }
+        .recorder-ui-pointer.hidden {
+          display: none;
+        }
       </style>
+      <div class="recorder-ui-pointer">
+        <!-- https://github.com/grommet/grommet-icons/blob/master/public/img/cursor.svg -->
+        <svg width="30" height="30" viewBox="0 0 24 24">
+        <polygon
+          fill="#666a"
+          stroke="#fff"
+          stroke-width="1.15"
+          points="6 3 18 14 13 15 16 20.5 13 22 10 16 6 19"
+        />
+      </div>
       <div class="recorder-ui-controls"></div>
       <form onchange="recorder.getFormData(this)"></form>
       <details open></details>
@@ -790,6 +816,7 @@ export class DOMRecorder {
     this.replaying = true
     this.actionsEl.open = false
     this.formEl.classList.add('hidden')
+    this.pointerEl.classList.remove('hidden')
 
     this.paintControls()
 
@@ -820,6 +847,11 @@ export class DOMRecorder {
           new ctor(action.event.type, { view: window, ...dispatchOptions }),
           copyEvent(action.event)
         )
+
+        requestAnimationFrame(() => {
+          this.pointerEl.style.left = event.pageX + 'px'
+          this.pointerEl.style.top = event.pageY + 'px'
+        })
 
         if (action.selectors) {
           const el = selectorsToNode(action.selectors)
@@ -891,6 +923,7 @@ export class DOMRecorder {
 
     this.replaying = false
     this.formEl.classList.remove('hidden')
+    this.pointerEl.classList.add('hidden')
     this.paintControls()
   }
 }
