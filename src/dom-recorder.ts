@@ -116,12 +116,6 @@ function saveEvent(event: Events, capture: boolean | undefined): SavedEvent {
   }
 }
 
-// const filterOutElements = [
-//   HTMLHtmlElement,
-//   Document,
-//   Window,
-// ]
-
 function getElementSelector(el: Element | null) {
   const parts: string[] = []
 
@@ -186,7 +180,9 @@ function selectorsToNode(selectors: string[]) {
 
     el = rootNode?.querySelector(sel)
     if (!el) return current
+
     current = el
+
     rootNode = (el as Element)?.shadowRoot
     if (!rootNode) break
   }
