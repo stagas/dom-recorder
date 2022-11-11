@@ -26,12 +26,14 @@ const allEvents = [
     'wheel',
     'input',
     'change',
+    'contextmenu',
   ]],
 
   ['pointer', [
     'pointerdown',
     'pointerup',
     'pointermove',
+    'pointerover',
     'pointerenter',
     'pointerleave',
     'pointercancel',
@@ -41,6 +43,7 @@ const allEvents = [
     'mousedown',
     'mouseup',
     'mousemove',
+    'mouseover',
     'mouseenter',
     'mouseleave',
     'mousecancel',
@@ -795,8 +798,8 @@ export class DOMRecorder {
           mutable(dispatchProps)
         )
 
-        const event: Event = Object.defineProperties(
-          new ctor(action.event.type, {}, dispatchOptions),
+        const event: PointerEvent = Object.defineProperties(
+          new ctor(action.event.type, { view: window, ...dispatchOptions }),
           copyEvent(action.event)
         )
 
