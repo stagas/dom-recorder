@@ -1,7 +1,7 @@
 
 
 <h1>
-dom-recorder <a href="https://npmjs.org/package/dom-recorder"><img src="https://img.shields.io/badge/npm-v1.1.0-F00.svg?colorA=000"/></a> <a href="src"><img src="https://img.shields.io/badge/loc-783-FFF.svg?colorA=000"/></a> <a href="https://cdn.jsdelivr.net/npm/dom-recorder@1.1.0/dist/dom-recorder.min.js"><img src="https://img.shields.io/badge/brotli-4.9K-333.svg?colorA=000"/></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F0B.svg?colorA=000"/></a>
+dom-recorder <a href="https://npmjs.org/package/dom-recorder"><img src="https://img.shields.io/badge/npm-v1.1.1-F00.svg?colorA=000"/></a> <a href="src"><img src="https://img.shields.io/badge/loc-783-FFF.svg?colorA=000"/></a> <a href="https://cdn.jsdelivr.net/npm/dom-recorder@1.1.1/dist/dom-recorder.min.js"><img src="https://img.shields.io/badge/brotli-4.9K-333.svg?colorA=000"/></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-F0B.svg?colorA=000"/></a>
 </h1>
 
 <p></p>
