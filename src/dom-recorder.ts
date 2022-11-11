@@ -424,7 +424,7 @@ export class DOMRecorder {
           white-space: pre;
         }
         #recorder-ui details[open] {
-          height: 300px;
+          height: 200px;
           overflow: scroll;
           resize: vertical;
         }
@@ -675,7 +675,7 @@ export class DOMRecorder {
     if (el.dataset.expanded === 'true') return
     el.dataset.expanded = 'true'
     const action = this.actions[+el.id.split('action')!.pop()!]
-    const eventDetails = JSON.stringify(action.event, null, 2)
+    const eventDetails = `\n${action.selectors.join('\n > ')}\n${JSON.stringify(action.event, null, 2)}`
     this.actionsEl.querySelector(`#${el.id}`)!.append(eventDetails)
   }
 
