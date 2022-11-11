@@ -1,7 +1,10 @@
 import { MapMap, mutable, pick } from 'everyday-utils'
 import type { StringKeys } from 'everyday-types'
 
-export type SavedEvent = Events & { is: StringKeys<typeof EventConstructorsMap> }
+export type SavedEvent = Events & {
+  is: StringKeys<typeof EventConstructorsMap>
+  capture: boolean | undefined
+}
 
 export interface Action {
   selectors: string[]
@@ -99,9 +102,10 @@ function copyEvent(event: Events): PropertyDescriptorMap {
   )
 }
 
-function saveEvent(event: Events): SavedEvent {
+function saveEvent(event: Events, capture: boolean | undefined): SavedEvent {
   return {
     is: event.constructor.name as keyof typeof EventConstructorsMap,
+    capture,
     ...(Object.fromEntries(
       [...copyEventProps, ...saveEventProps, ...dispatchProps].map(
         (key): [string, Events[keyof Events]] =>
@@ -211,19 +215,30 @@ const patchEventTarget = () => {
     }
 
     function listener(this: Element, event: Event) {
+      const isRecording = handler.recording && (event.constructor.name in EventConstructorsMap)
+
+      let selectors!: string[]
+
+      if (isRecording) {
+        selectors = nodeToSelectors(this)
+      }
+
       const result = callback.call(this, event)
 
       // used to detect idle for autoplay
       handler.lastEventTime = event.timeStamp
 
-      if (handler.recording) {
-        if (event.constructor.name in EventConstructorsMap) {
-          const selectors = nodeToSelectors(this)
-          if (selectors.filter(Boolean).length) {
-            handler.onaction({ selectors, event: saveEvent(event as Events) })
-          } else {
-            console.warn('no selectors', this)
-          }
+      if (isRecording) {
+        if (selectors.filter(Boolean).length) {
+          handler.onaction({
+            selectors,
+            event: saveEvent(
+              event as Events,
+              typeof options === 'boolean' ? options : options?.capture
+            )
+          })
+        } else {
+          console.warn('no selectors', this)
         }
       }
 
@@ -839,19 +854,17 @@ export class DOMRecorder {
 
           // this selector is window and tangent event is the same event,
           // then it's a .capture so we skip and let it propagate normally.
-          if (action.selectors[0] === 'window') {
-            const nextAction = actions!.at(i + 1)
+          const nextAction = actions!.at(i + 1)
 
-            for (const tangentAction of [prevAction, nextAction]) {
-              if (tangentAction?.event.type === action.event.type
-                && tangentAction.event.timeStamp === action.event.timeStamp) {
-                this.skipped++
-                requestAnimationFrame(() => {
-                  this.actionsEl.querySelector(`#action${i}`)?.classList.add('recorder-ui-event-skipped')
-                  this.paintStatus(1)
-                })
-                continue actions
-              }
+          for (const tangentAction of action.event.capture ? [nextAction] : [prevAction]) {
+            if (tangentAction?.event.type === action.event.type
+              && tangentAction.event.timeStamp === action.event.timeStamp) {
+              this.skipped++
+              requestAnimationFrame(() => {
+                this.actionsEl.querySelector(`#action${i}`)?.classList.add('recorder-ui-event-skipped')
+                this.paintStatus(1)
+              })
+              continue actions
             }
           }
 
