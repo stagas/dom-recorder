@@ -18,7 +18,7 @@ export type Events =
   & PointerEvent
   & WheelEvent
 
-const MIN_IDLE_TIME = parseInt(localStorage.recorderMinIdleTime) || 50
+const DELAY = parseInt(localStorage.recorderDelay) || 50
 const FRAME_TIME = 1000 / 60
 
 const allEvents = [
@@ -619,7 +619,7 @@ export class DOMRecorder {
   }
 
   async waitUntilIdle() {
-    while (performance.now() - handler.lastEventTime < MIN_IDLE_TIME) {
+    while (performance.now() - handler.lastEventTime < DELAY) {
       await new Promise((resolve) =>
         setTimeout(resolve, 50)
       )
