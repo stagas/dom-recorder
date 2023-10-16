@@ -465,12 +465,13 @@ export class DOMRecorder {
       <div class="recorder-ui-pointer hidden">
         <!-- https://github.com/grommet/grommet-icons/blob/master/public/img/cursor.svg -->
         <svg width="30" height="30" viewBox="0 0 24 24">
-        <polygon
-          fill="#666a"
-          stroke="#fff"
-          stroke-width="1.15"
-          points="6 3 18 14 13 15 16 20.5 13 22 10 16 6 19"
-        />
+          <polygon
+            fill="#666a"
+            stroke="#fff"
+            stroke-width="1.15"
+            points="6 3 18 14 13 15 16 20.5 13 22 10 16 6 19"
+          />
+        </svg>
       </div>
       <div class="recorder-ui-controls"></div>
       <form onchange="recorder.getFormData(this)"></form>
@@ -497,7 +498,7 @@ export class DOMRecorder {
       </div>
       &nbsp;
       <label
-        oncontextmenu="event.preventDefault();localStorage.recorderMinIdleTime=parseInt(prompt('Enter idle time(ms) needed for autoplay to begin:', parseInt(localStorage.recorderMinIdleTime) || 50))"
+        oncontextmenu="event.preventDefault();localStorage.recorderDelay=parseInt(prompt('Enter idle time(ms) needed for autoplay to begin:', parseInt(localStorage.recorderDelay) || 50))"
       >
         auto:<input
           type="checkbox"
@@ -510,6 +511,13 @@ export class DOMRecorder {
           type="checkbox"
           onchange="localStorage.recorderLoop=!!this.checked"
           ${localStorage.recorderLoop === 'true' ? 'checked' : ''}
+        />
+      </label>
+      <label>
+        log:<input
+          type="checkbox"
+          onchange="localStorage.recorderLog=!!this.checked"
+          ${localStorage.recorderLog === 'true' ? 'checked' : ''}
         />
       </label>
     `
@@ -819,8 +827,12 @@ export class DOMRecorder {
     actions ??= this.actions
 
     const play = async () => {
-      console.log('start of replay')
-      console.time('replay time')
+      const logEnabled = localStorage.recorderLog == 'true'
+
+      if (logEnabled) {
+        console.log('start of replay')
+        console.time('replay time')
+      }
 
       this.statusEl.textContent = `${actions!.length} remaining`
 
@@ -909,8 +921,10 @@ export class DOMRecorder {
         replayOne(actions![n])
       }
 
-      console.log('end of replay')
-      console.timeEnd('replay time')
+      if (logEnabled) {
+        console.log('end of replay')
+        console.timeEnd('replay time')
+      }
     }
 
     do {
