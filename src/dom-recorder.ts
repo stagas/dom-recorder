@@ -1,5 +1,4 @@
-import { MapMap, mutable, pick } from 'everyday-utils'
-import type { StringKeys } from 'everyday-types'
+import { TwoKeyMap as MapMap, StringKeys, mutable, pick } from 'utils'
 
 export type SavedEvent = Events & {
   is: StringKeys<typeof EventConstructorsMap>
@@ -201,7 +200,7 @@ const patchEventTarget = () => {
     onaction: (_action: Action) => { }
   }
 
-  const callbacks = new MapMap<EventListenerOrEventListenerObject, boolean | AddEventListenerOptions | undefined, EventListener>()
+  const callbacks = new MapMap<any, EventListener>()
 
   function callbackFor(
     callback: EventListener,
@@ -716,7 +715,7 @@ export class DOMRecorder {
     if (!res.ok) {
       console.warn(res)
     } else {
-      const json = await res.json()
+      const json = await res.json() as Action[]
       this.actions = json
       this.paintActions()
       this.paintControls()
@@ -836,7 +835,7 @@ export class DOMRecorder {
 
       this.statusEl.textContent = `${actions!.length} remaining`
 
-      let prevAction: Action | void
+      let prevAction: Action | undefined
 
       const replayOne = (action: Action) => {
         const ctor = EventConstructorsMap[action.event.is] as any

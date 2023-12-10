@@ -1,4 +1,4 @@
-import { DOMRecorder } from '../src'
+import { DOMRecorder } from '../src/index.ts'
 
 declare const window: any
 

@@ -1,1 +1,1 @@
-export * from './dom-recorder'
+export * from './dom-recorder.ts'
